@@ -1,14 +1,34 @@
 <template>
-  <q-page padding class="q-gutter-y-md">
-    <q-btn push icon="download" unelevated color="light-green-8" class="q-px-xl myBtn" label="Download" rounded />
-    <q-input prefix="+98" rounded outlined label="mobile" />
+  <q-page padding>
+    <div class="row q-gutter-md">
+      <div class="col-1">
+        <q-btn @click="counter>0?counter--:''" round icon="remove" color="pink-9" />
+      </div>
+      <div class="col">
+        <q-input v-model="counter" input-class="text-center" label="counter" />
+        {{ counter }}
+      </div>
+      <div class="col-1">
+        <q-btn @click="counter++" round icon="add" color="pink-9" />
+      </div>
+    </div>
+    <q-btn @click="$router.push('/about')" label="About" />
   </q-page>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
-
+import { defineComponent, onMounted, reactive, toRefs } from "vue";
 export default defineComponent({
-  name: 'IndexPage'
-})
+  name: "IndexPage",
+  setup () {
+    const props = reactive({
+      counter: 0
+    })
+    onMounted(() => {
+    })
+    return {
+      ...toRefs(props),
+    }
+  }
+});
 </script>

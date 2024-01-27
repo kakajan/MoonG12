@@ -2,6 +2,9 @@
   "folders": [
     {
       "path": "quasar"
+    },
+    {
+      "path": "../BigStart-G12/E02"
     }
   ],
   "settings": {

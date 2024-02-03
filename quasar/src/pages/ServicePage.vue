@@ -14,12 +14,11 @@
     </div>
     <hr />
     <h1>{{ average }}</h1>
-    {{ list }}
   </q-page>
 </template>
 
 <script>
-import { reactive, ref, toRefs } from "vue";
+import { computed, reactive, ref, toRefs } from "vue";
 export default {
   // name: 'PageName',
   setup() {
@@ -27,7 +26,6 @@ export default {
       name: null,
       score: 0,
       list: [],
-      average: null
     });
 
     function add () {
@@ -37,16 +35,18 @@ export default {
       })
       props.name = null;
       props.score = 0;
-      let total = 0;
-      props.list.forEach(val => {
-        total += +val.score
-        console.log(total);
-      })
-      props.average = total/props.list.length
     }
+    const average = computed(() => {
+      let total = 0;
+      props.list.forEach((val) => {
+        total += +val.score
+      })
+      return total / props.list.length;;
+    })
     return {
       ...toRefs(props),
-      add
+      add,
+      average
     };
   },
 };

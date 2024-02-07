@@ -5,6 +5,12 @@
     },
     {
       "path": "../BigStart-G12/E02"
+    },
+    {
+      "path": "InstaClone/BE"
+    },
+    {
+      "path": "InstaClone/FE"
     }
   ],
   "settings": {

@@ -21,7 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::post('/register', function (Request $request) {
     if (Auth::check()) {
-        return response()->json(['status' => false, 'authenticated'=>true]);
+        return response()->json(['status' => false, 'authenticated' => true]);
 
     } else {
         $user = User::create($request->all());
@@ -41,4 +41,29 @@ Route::post('/login', function (Request $request) {
         return Auth::check();
     }
 
+});
+Route::post('/verify', function (Request $request) {
+    $user = User::where('mobile', $request->mobile)->first();
+    $password = rand(1111, 9999);
+    if ($user) {
+        $user->password = $password;
+        $user->save();
+    } else {
+        $user = new User;
+        $user->mobile = $request->mobile;
+        $user->password = $password;
+        $user->save();
+    }
+
+    $client = new SoapClient("http://ippanel.com/class/sms/wsdlservice/server.php?wsdl");
+    $user = "alirezahatami";
+    $pass = "alireza57800";
+    $fromNum = "+983000505";
+    $toNum = array($request->mobile);
+    $pattern_code = "xwl8go0hhvnous5";
+    $input_data = array("code" => $password);
+
+    $client->sendPatternSms($fromNum, $toNum, $user, $pass, $pattern_code, $input_data);
+
+    return response()->json(['status' => true]);
 });

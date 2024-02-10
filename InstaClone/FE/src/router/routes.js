@@ -21,6 +21,20 @@ const routes = [
       { path: '', component: () => import('src/pages/Auth/LoginPage.vue') }
     ]
   },
+  {
+    path: '/new-login',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('src/pages/Auth/NewLogin.vue') }
+    ]
+  },
+  {
+    path: '/confirm/:mobile',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('src/pages/Auth/ConfirmLogin.vue') }
+    ]
+  },
 
   // Always leave this as last one,
   // but you can also remove it

@@ -3,7 +3,7 @@
     <!-- content -->
     <div class="row">
       <div class="col-12 text-center">
-        {{ $route.params.mobile }}
+        {{ appData.mobile }}
         <q-input v-model="password" type="password" />
       </div>
       <div class="col-12">
@@ -18,12 +18,16 @@ import { reactive, toRefs } from "vue";
 import { api } from "src/boot/axios";
 import { useRoute, useRouter } from "vue-router";
 import { useQuasar } from "quasar";
+import { useAppDataStore } from 'src/stores/appData';
 export default {
   // name: 'PageName',
-  setup() {
+  setup () {
+    const appData = useAppDataStore();
     const router = useRouter();
-    const route = useRoute();
     const $q = useQuasar();
+    if (!appData.mobile) {
+      router.push('/new-login')
+    }
     const props = reactive({
       email: null,
       password: null,
@@ -31,7 +35,7 @@ export default {
     function login() {
       api
         .post("oauth/token", {
-          username: route.params.mobile,
+          username: appData.mobile,
           password: props.password,
           grant_type: "password",
           client_id: 2,
@@ -70,6 +74,7 @@ export default {
     return {
       ...toRefs(props),
       login,
+      appData
     };
   },
 };

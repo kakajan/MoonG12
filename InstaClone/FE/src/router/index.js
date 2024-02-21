@@ -43,6 +43,15 @@ export default route(function (/* { store, ssrContext } */) {
           query: { redirect: to.fullPath },
         });
       }
+    } else if (to.matched.some((record) => record.meta.login)) {
+      if (Cookies.get("access_token")) {
+        next({
+          path: "/",
+          query: { redirect: to.fullPath },
+        });
+      } else {
+        next();
+      }
     } else {
       next();
     }

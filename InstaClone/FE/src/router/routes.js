@@ -7,7 +7,7 @@ const routes = [
         path: "",
         component: () => import("pages/IndexPage.vue"),
         meta: {
-          auth: true
+          auth: true,
         },
       },
     ],
@@ -20,7 +20,7 @@ const routes = [
         path: "",
         component: () => import("pages/AddPost.vue"),
         meta: {
-          auth: true
+          auth: true,
         },
       },
     ],
@@ -33,7 +33,7 @@ const routes = [
         path: "",
         component: () => import("pages/PostsPage.vue"),
         meta: {
-          auth: true
+          auth: true,
         },
       },
     ],
@@ -56,7 +56,13 @@ const routes = [
     path: "/new-login",
     component: () => import("layouts/MainLayout.vue"),
     children: [
-      { path: "", component: () => import("src/pages/Auth/NewLogin.vue") },
+      {
+        path: "",
+        component: () => import("src/pages/Auth/NewLogin.vue"),
+        meta: {
+          login: true
+        },
+      },
     ],
   },
   {

@@ -18,9 +18,11 @@
 <script>
 import { reactive, toRefs } from 'vue'
 import { api } from 'src/boot/axios'
+import { useRouter } from 'vue-router'
 export default {
   // name: 'PageName',
-  setup() {
+  setup () {
+    const router = useRouter();
     const props = reactive({
       title: null,
       description: null
@@ -30,7 +32,9 @@ export default {
         title: props.title,
         description: props.description
       }).then(r => {
-        console.log(r.data);
+        if (r.data.status) {
+          router.push('/posts')
+        }
       })
         .catch(e => {
 

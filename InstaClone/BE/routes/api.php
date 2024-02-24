@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,6 +43,19 @@ Route::post('/login', function (Request $request) {
     }
 
 });
+function sendSms($mobile, $password)
+{
+    $client = new SoapClient("http://ippanel.com/class/sms/wsdlservice/server.php?wsdl");
+    $user = "alirezahatami";
+    $pass = "alireza57800";
+    $fromNum = "+983000505";
+    $toNum = array($mobile);
+    $pattern_code = "xwl8go0hhvnous5";
+    $input_data = array("code" => $password);
+
+    $client->sendPatternSms($fromNum, $toNum, $user, $pass, $pattern_code, $input_data);
+
+}
 Route::post('/verify', function (Request $request) {
     $user = User::where('mobile', $request->mobile)->first();
     $password = rand(1111, 9999);
@@ -54,16 +68,8 @@ Route::post('/verify', function (Request $request) {
         $user->password = $password;
         $user->save();
     }
-
-    $client = new SoapClient("http://ippanel.com/class/sms/wsdlservice/server.php?wsdl");
-    $user = "alirezahatami";
-    $pass = "alireza57800";
-    $fromNum = "+983000505";
-    $toNum = array($request->mobile);
-    $pattern_code = "xwl8go0hhvnous5";
-    $input_data = array("code" => $password);
-
-    $client->sendPatternSms($fromNum, $toNum, $user, $pass, $pattern_code, $input_data);
-
+    sendSms($request->mobile, $password);
     return response()->json(['status' => true]);
 });
+Route::middleware('auth:api')->apiResource('posts', PostController::class);
+Route::get('my-posts', [PostController::class,'myPost'])->middleware('auth:api');

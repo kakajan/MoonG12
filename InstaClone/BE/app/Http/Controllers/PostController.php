@@ -12,7 +12,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        return Post::all();
     }
 
     /**
@@ -28,7 +28,14 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = $request->user();
+        $request['user_id'] = $user->id;
+        $post = Post::create($request->all());
+        if($post){
+            return response()->json(['status'=>true, 'post'=>$post]);
+        } else {
+            return response()->json(['status'=>false]);
+        }
     }
 
     /**
@@ -61,5 +68,10 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         //
+    }
+    public function myPost(Request $request){
+        $user = $request->user();
+        // return $user->posts;
+        return response()->json(["myPosts"=>$user->posts]);
     }
 }

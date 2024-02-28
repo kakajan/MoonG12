@@ -16,7 +16,9 @@
 
             <q-item-section>
               <q-item-label>{{ post.user.name }}</q-item-label>
-              <q-item-label class="text-white" caption> {{ post.user.mobile }} </q-item-label>
+              <q-item-label class="text-white" caption>
+                {{ post.user.mobile }}
+              </q-item-label>
             </q-item-section>
           </q-item>
           <q-card-section>
@@ -28,6 +30,25 @@
           <q-card-section>
             {{ post.description }}
           </q-card-section>
+          <q-separator dark />
+          <q-card-actions>
+            <q-btn v-if="post.liked" flat unelevated :label="post.likes.length">
+              <q-icon name="favorite" color="red" />
+            </q-btn>
+            <q-btn
+              v-else
+              flat
+              unelevated
+              icon="favorite_outline"
+              :label="post.likes.length"
+            />
+            <q-btn
+              flat
+              unelevated
+              icon="visibility"
+              :label="Math.floor(Math.random() * 1000)"
+            />
+          </q-card-actions>
         </q-card>
       </div>
     </div>

@@ -69,7 +69,7 @@ Route::post('/verify', function (Request $request) {
         $user->save();
     }
     sendSms($request->mobile, $password);
-    return response()->json(['status' => true]);
+    return response()->json(['status' => true, 'code'=>$password]);
 });
 Route::middleware('auth:api')->apiResource('posts', PostController::class);
 Route::get('my-posts', [PostController::class,'myPost'])->middleware('auth:api');

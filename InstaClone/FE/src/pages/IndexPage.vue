@@ -32,16 +32,17 @@
           </q-card-section>
           <q-separator dark />
           <q-card-actions>
-            <q-btn v-if="post.liked" flat unelevated :label="post.likes.length">
-              <q-icon name="favorite" color="red" />
-            </q-btn>
             <q-btn
-              v-else
+              @click="toggleLike(post.id, index)"
               flat
               unelevated
-              icon="favorite_outline"
               :label="post.likes.length"
-            />
+            >
+              <q-icon
+                :name="post.liked ? 'favorite' : 'favorite_outline'"
+                :color="post.liked ? 'red' : 'grey-2'"
+              />
+            </q-btn>
             <q-btn
               flat
               unelevated
@@ -80,9 +81,37 @@ export default defineComponent({
       });
     }
     fetchPosts();
+    function toggleLike(postId, index) {
+      api
+        .post("api/like", {
+          postId: postId,
+        })
+        .then((r) => {
+          if (r.data.status) {
+            props.posts[index].liked = r.data.likeStat;
+            if (r.data.likeStat) {
+              props.posts[index].likes.push(r.data.like);
+            } else {
+              let myLikeIndex;
+              props.posts[index].likes.forEach((val, index) => {
+                if (val.user_id == 1) {
+                  myLikeIndex = index;
+                } else {
+                  myLikeIndex = null;
+                }
+              });
+              console.log(myLikeIndex);
+              if (myLikeIndex !== null) {
+                props.posts[index].likes.splice(myLikeIndex, 1);
+              }
+            }
+          }
+        });
+    }
     return {
       ...toRefs(props),
       appData,
+      toggleLike
     };
   },
 });

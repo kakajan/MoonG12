@@ -2,11 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Like;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    public function like(Request $request)
+    {
+        $post = Post::find($request->postId);
+        $likeStat = false;
+        $myLike = $post->likes->where('user_id', $request->user()->id)->first();
+        if ($myLike) {
+            $post->usersLiked()->detach($request->user()->id);
+            $likeStat = false;
+        } else {
+            $likeStat = true;
+            $post->usersLiked()->attach($request->user()->id);
+        }
+        return ['status' => true, 'likeStat' => $likeStat];
+    }
+    public function unlike(Request $request)
+    {
+        $post = Post::find($request->postId);
+        $post->usersLiked()->detach($request->user()->id);
+
+        return true;
+    }
     /**
      * Display a listing of the resource.
      */

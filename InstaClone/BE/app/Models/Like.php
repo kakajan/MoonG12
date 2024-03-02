@@ -12,6 +12,8 @@ class Like extends Model
 {
     use HasFactory;
     protected $with = ['user'];
+    public $timestamps = false;
+    protected $fillable = ['user_id', 'post_id'];
     /**
      * Get the user that owns the Like
      *

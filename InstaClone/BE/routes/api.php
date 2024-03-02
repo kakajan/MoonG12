@@ -73,3 +73,4 @@ Route::post('/verify', function (Request $request) {
 });
 Route::middleware('auth:api')->apiResource('posts', PostController::class);
 Route::get('my-posts', [PostController::class,'myPost'])->middleware('auth:api');
+Route::middleware('auth:api')->post('like', [PostController::class,'like'])->middleware('auth:api');

@@ -1,10 +1,12 @@
 <?php
 
-use App\Http\Controllers\PostController;
 use App\Models\User;
+use App\Mail\WelcomeMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,9 +70,12 @@ Route::post('/verify', function (Request $request) {
         $user->password = $password;
         $user->save();
     }
-    sendSms($request->mobile, $password);
+    //sendSms($request->mobile, $password);
     return response()->json(['status' => true, 'code'=>$password]);
 });
 Route::middleware('auth:api')->apiResource('posts', PostController::class);
 Route::get('my-posts', [PostController::class,'myPost'])->middleware('auth:api');
 Route::middleware('auth:api')->post('like', [PostController::class,'like'])->middleware('auth:api');
+Route::get('testMail', function(){
+    Mail::to('faslolkhitab@gmail.com')->send(new WelcomeMail());
+});

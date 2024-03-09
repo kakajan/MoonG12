@@ -18,9 +18,9 @@ class PostController extends Controller
             $likeStat = false;
         } else {
             $likeStat = true;
-            $post->usersLiked()->attach($request->user()->id);
+             $post->usersLiked()->attach($request->user()->id);
         }
-        return ['status' => true, 'likeStat' => $likeStat];
+        return ['status' => true, 'likeStat' => $likeStat, 'like'=>$post->usersLiked[0]->pivot];
     }
     public function unlike(Request $request)
     {

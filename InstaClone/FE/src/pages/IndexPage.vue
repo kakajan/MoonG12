@@ -6,51 +6,7 @@
         :key="'my-post' + index"
         class="col-xs-12 col-md-4 col-lg-3"
       >
-        <q-card dark bordered class="bg-grey-9 my-card">
-          <q-item>
-            <q-item-section avatar>
-              <q-avatar>
-                <img src="https://cdn.quasar.dev/img/boy-avatar.png" />
-              </q-avatar>
-            </q-item-section>
-
-            <q-item-section>
-              <q-item-label>{{ post.user.name }}</q-item-label>
-              <q-item-label class="text-white" caption>
-                {{ post.user.mobile }}
-              </q-item-label>
-            </q-item-section>
-          </q-item>
-          <q-card-section>
-            <div class="text-subtitle2">{{ post.title }}</div>
-          </q-card-section>
-
-          <q-separator dark inset />
-
-          <q-card-section>
-            {{ post.description }}
-          </q-card-section>
-          <q-separator dark />
-          <q-card-actions>
-            <q-btn
-              @click="toggleLike(post.id, index)"
-              flat
-              unelevated
-              :label="post.likes.length"
-            >
-              <q-icon
-                :name="post.liked ? 'favorite' : 'favorite_outline'"
-                :color="post.liked ? 'red' : 'grey-2'"
-              />
-            </q-btn>
-            <q-btn
-              flat
-              unelevated
-              icon="visibility"
-              :label="Math.floor(Math.random() * 1000)"
-            />
-          </q-card-actions>
-        </q-card>
+        <post-card @like="toggleLike(post.id,index)" :post="post"/>
       </div>
     </div>
   </q-page>
@@ -60,9 +16,12 @@
 import { api } from "src/boot/axios";
 import { useAppDataStore } from "src/stores/appData";
 import { defineComponent, reactive, toRefs } from "vue";
-
+import PostCard from "src/components/PostCard.vue";
 export default defineComponent({
   name: "IndexPage",
+  components: {
+    PostCard
+  },
   setup() {
     const appData = useAppDataStore();
     const props = reactive({
@@ -91,6 +50,7 @@ export default defineComponent({
             props.posts[index].liked = r.data.likeStat;
             if (r.data.likeStat) {
               props.posts[index].likes.push(r.data.like);
+              console.log(props.posts[index].likes);
             } else {
               let myLikeIndex;
               props.posts[index].likes.forEach((val, index) => {
@@ -111,7 +71,7 @@ export default defineComponent({
     return {
       ...toRefs(props),
       appData,
-      toggleLike
+      toggleLike,
     };
   },
 });
